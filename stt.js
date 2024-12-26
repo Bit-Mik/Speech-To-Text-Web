@@ -42,6 +42,12 @@ click_to_record.addEventListener('click',function(){
         console.log(confidence);
     });
 
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        alert(`Error occurred: ${event.error}`)
+        // is_recording.innerHTML = `Error occurred: ${event.error}`;
+    };
+
     if (speech == true) {
         recognition.start();
     }

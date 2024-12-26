@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech to Text</title>
+</head>
+<body>
+  <h1>Speech to Text Example</h1>
+  <button id="start">Start Recognition</button>
+  <button id="stop">Stop Recognition</button>
+  <p><strong>Recognized Text:</strong></p>
+  <p id="output"></p>
+
+  <script>
+    // Check if the browser supports the Web Speech API
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+
+      // Set recognition properties
+      recognition.continuous = true; // Keep recognizing until explicitly stopped
+      recognition.lang = 'en-US';   // Set language (can change to other supported languages)
+      recognition.interimResults = false; // Show only final results
+      recognition.maxAlternatives = 1;
+
+      const startButton = document.getElementById('start');
+      const stopButton = document.getElementById('stop');
+      const output = document.getElementById('output');
+
+      // Start recognition
+      startButton.addEventListener('click', () => {
+        recognition.start();
+        output.textContent = 'Listening...';
+      });
+
+      // Stop recognition
+      stopButton.addEventListener('click', () => {
+        recognition.stop();
+        output.textContent = 'Stopped.';
+      });
+
+      // When speech is recognized
+      recognition.onresult = (event) => {
+        const transcript = event.results[event.resultIndex][0].transcript;
+        output.textContent = transcript;
+      };
+
+      // Handle errors
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        output.textContent = 'Error occurred: ' + event.error;
+      };
+    } else {
+      alert('Your browser does not support the Web Speech API.');
+    }
+  </script>
+</body>
+</html>
